@@ -250,10 +250,12 @@ def parse_gcov_file(args, fobj, filename):
         if len(report_fields) == 1:
             continue
 
-        print("Parsing line: {}\n".format(line))
-        cov_num = report_fields[0].strip()
-        line_num = int(report_fields[1].strip())
-        text = report_fields[2]
+        try:
+            cov_num = report_fields[0].strip()
+            line_num = int(report_fields[1].strip())
+            text = report_fields[2]
+        except Exception as e:
+            raise Exception("Malformed line: {}".format(line), e)
         if line_num == 0:
             continue
         if re.search(r'\bLCOV_EXCL_START\b', text):
