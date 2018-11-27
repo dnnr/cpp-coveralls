@@ -447,7 +447,10 @@ def collect(args):
                         with io.open(source_file_path, mode='rb') as src_file:
                             src_report['source_digest'] = hashlib.md5(src_file.read()).hexdigest()
 
-                        src_report['coverage'] = parse_gcov_file(args, fobj, gcov_path)
+                        try:
+                            src_report['coverage'] = parse_gcov_file(args, fobj, gcov_path)
+                        except Exception as e:
+                            raise Exception("Failed to parse {}".format(gcov_path)), e
                         if src_path in src_files:
                             src_files[src_path] = combine_reports(src_files[src_path], src_report)
                         else:
